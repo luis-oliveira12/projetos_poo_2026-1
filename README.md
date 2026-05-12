@@ -1,1 +1,1 @@
-# projetos_poo_2026-1
+Repositório criado para projetos da disciplina de Programação Orientada a Objetos 
