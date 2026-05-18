@@ -1,4 +1,4 @@
-package ufpb.dcx.projetosPoo;
+package ufpb.dcx.atividade2;
 
 import java.util.List;
 import java.util.ArrayList;
