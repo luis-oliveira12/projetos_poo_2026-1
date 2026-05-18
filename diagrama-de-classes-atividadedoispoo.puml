@@ -1,0 +1,44 @@
+@startuml
+
+package ufpb.dcx.projetosPoo{
+    class Main{
+        +main(args: String[]): void
+    }
+    class Filme{
+        -titulo : String
+        -anoDeLancamento : int
+        -diretor : String
+        -genero : String
+        -classificacaoIndicativa : int
+
+        +Filme()
+        +Filme(titulo: String, anoDeLancamento: int, diretor: String, genero: String, classificacaoIndicativa: int)
+        +getTitulo(): String
+        +setTitulo(titulo: String): void
+        +getAnoDeLancamento(): int
+        +setAnoDeLancamento(anoDeLancamento: int): void
+        +getDiretor(): String
+        +setDiretor(diretor: String): void
+        +getGenero(): String
+        +setGenero(genero: String): void
+        +getClassificacaoIndicativa(): int
+        +setClassificacaoIndicativa(classificacaoIndicativa: int): void
+        +toString(): String
+        +equals(obj: Object): boolean
+        +hashCode(): int
+    }
+
+    class CatalogoDeFilmes{
+        -listaDeFilmes: List<Filmes>
+
+        +CatalogoDeFilmes()
+        +adicionarFilme(novoFilme: Filmes): void
+        +listarFilmes(): void
+    }
+}
+
+CatalogoDeFilmes "1" o-- "*" Filme : gerencia >
+Main ..> CatalogoDeFilmes : usa >
+Main ..> Filme : instancia >
+
+@enduml
