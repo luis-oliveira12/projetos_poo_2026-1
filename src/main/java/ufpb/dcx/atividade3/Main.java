@@ -4,15 +4,15 @@ import ufpb.dcx.atividade3.*;
 import java.util.List;
 import java.util.Scanner;
 
-public class TestaSistemaAmigoGUI {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         SistemaAmigo sistema = new SistemaAmigo();
         boolean sair = false;
 
-        System.out.println("🎉 Bem-vindo ao Sistema de Amigo Secreto Interativo! 🎉");
+        System.out.println(" Bem-vindo ao Sistema de Amigo Secreto Interativo! ");
 
-        // O laço while mantém o programa rodando até o usuário escolher Sair
+
         while (!sair) {
             System.out.println("\n================ MENU ================");
             System.out.println("1. Cadastrar um Amigo");
@@ -24,17 +24,17 @@ public class TestaSistemaAmigoGUI {
             System.out.println("7. Ver Todas as Mensagens");
             System.out.println("8. Sair do Programa");
             System.out.println("======================================");
-            System.out.print("👉 Escolha uma opção: ");
+            System.out.print(" Escolha uma opção: ");
 
             String opcaoStr = scanner.nextLine();
             int opcao;
 
-            // Tratamento caso o usuário digite uma letra ao invés de número
+
             try {
                 opcao = Integer.parseInt(opcaoStr);
             } catch (NumberFormatException e) {
-                System.out.println("❌ ERRO: Por favor, digite um número válido!");
-                continue; // Volta para o início do while
+                System.out.println(" ERRO: Por favor, digite um número válido!");
+                continue;
             }
 
             switch (opcao) {
@@ -44,7 +44,7 @@ public class TestaSistemaAmigoGUI {
                     System.out.print("E-mail do amigo: ");
                     String email = scanner.nextLine();
                     sistema.cadastraAmigo(nome, email);
-                    System.out.println("✅ Amigo cadastrado com sucesso!");
+                    System.out.println(" Amigo cadastrado com sucesso!");
                     break;
 
                 case 2:
@@ -53,12 +53,12 @@ public class TestaSistemaAmigoGUI {
                     System.out.print("E-mail do amigo que ela tirou no sorteio: ");
                     String emailSorteado = scanner.nextLine();
 
-                    // AQUI ESTÁ O TRATAMENTO DE EXCEÇÃO!
+
                     try {
                         sistema.configuraAmigoSecretoDe(emailPessoa, emailSorteado);
-                        System.out.println("✅ Sorteio configurado com sucesso!");
+                        System.out.println(" Sorteio configurado com sucesso!");
                     } catch (AmigoInexistenteException e) {
-                        System.out.println("❌ ERRO DE CADASTRO: " + e.getMessage());
+                        System.out.println(" ERRO DE CADASTRO: " + e.getMessage());
                     }
                     break;
 
@@ -66,12 +66,12 @@ public class TestaSistemaAmigoGUI {
                     System.out.print("Deseja saber o amigo secreto de qual e-mail? ");
                     String emailBusca = scanner.nextLine();
 
-                    // AQUI ESTÃO OS DOIS TRATAMENTOS DE EXCEÇÃO JUNTOS!
+
                     try {
                         String resultado = sistema.pesquisaAmigoSecretoDe(emailBusca);
-                        System.out.println("🎁 O amigo secreto dessa pessoa é: " + resultado);
+                        System.out.println(" O amigo secreto dessa pessoa é: " + resultado);
                     } catch (AmigoInexistenteException | AmigoNaoSorteadoException e) {
-                        System.out.println("❌ ERRO NA BUSCA: " + e.getMessage());
+                        System.out.println(" ERRO NA BUSCA: " + e.getMessage());
                     }
                     break;
 
@@ -84,7 +84,7 @@ public class TestaSistemaAmigoGUI {
                     boolean anonimaTodos = scanner.nextLine().equalsIgnoreCase("S");
 
                     sistema.enviarMensagemParaTodos(textoTodos, remetenteTodos, anonimaTodos);
-                    System.out.println("✅ Mensagem enviada para o mural de todos!");
+                    System.out.println(" Mensagem enviada para o mural de todos!");
                     break;
 
                 case 5:
@@ -98,11 +98,11 @@ public class TestaSistemaAmigoGUI {
                     boolean anonimaAlguem = scanner.nextLine().equalsIgnoreCase("S");
 
                     sistema.enviarMensagemParaAlguem(textoAlguem, remetenteAlguem, destinatario, anonimaAlguem);
-                    System.out.println("✅ Mensagem entregue a " + destinatario + "!");
+                    System.out.println(" Mensagem entregue a " + destinatario + "!");
                     break;
 
                 case 6:
-                    System.out.println("\n--- 🕵️ Mensagens Anônimas ---");
+                    System.out.println("\n---  Mensagens Anônimas ---");
                     List<Mensagem> anonimas = sistema.pesquisaMensagensAnonimas();
                     if (anonimas.isEmpty()) {
                         System.out.println("Nenhuma mensagem anônima encontrada.");
@@ -114,7 +114,7 @@ public class TestaSistemaAmigoGUI {
                     break;
 
                 case 7:
-                    System.out.println("\n--- 📬 Todas as Mensagens ---");
+                    System.out.println("\n--- Todas as Mensagens ---");
                     List<Mensagem> todas = sistema.pesquisaTodasAsMensagens();
                     if (todas.isEmpty()) {
                         System.out.println("O mural de mensagens está vazio.");
@@ -126,14 +126,14 @@ public class TestaSistemaAmigoGUI {
                     break;
 
                 case 8:
-                    sair = true; // Quebra o laço while
-                    System.out.println("👋 Encerrando o sistema. Feliz Amigo Secreto!");
+                    sair = true;
+                    System.out.println(" Encerrando o sistema. Feliz Amigo Secreto!");
                     break;
 
                 default:
-                    System.out.println("❌ Opção inválida. Escolha um número de 1 a 8.");
+                    System.out.println(" Opção inválida. Escolha um número de 1 a 8.");
             }
         }
-        scanner.close(); // Fecha o leitor de teclado
+        scanner.close();
     }
 }

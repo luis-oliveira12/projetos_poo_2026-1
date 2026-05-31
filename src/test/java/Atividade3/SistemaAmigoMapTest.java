@@ -1,66 +1,72 @@
-package ufpb.dcx.atividade3;
+package Atividade3;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ArrayList;
+import ufpb.dcx.atividade3.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 
 public class SistemaAmigoMapTest {
-    private List<Mensagem> mensagens;
-    private Map<String, Amigo> amigos;
 
-    public SistemaAmigoMapTest() {
-        this.mensagens = new ArrayList<>();
-        this.amigos = new HashMap<>();
+    private SistemaAmigoMap sistema;
+
+
+    @BeforeEach
+    void setUp() {
+        sistema = new SistemaAmigoMap();
+        sistema.cadastraAmigo("José", "jose@email.com");
+        sistema.cadastraAmigo("Maria", "maria@email.com");
     }
 
-    public void cadastraAmigo(String nomeAmigo, String emailAmigo) {
-        this.amigos.put(emailAmigo.toLowerCase(), new Amigo(nomeAmigo, emailAmigo));
+
+    @Test
+    void testaCadastroEBuscaDeAmigo() {
+        Amigo jose = sistema.pesquisaAmigo("jose@email.com");
+
+
+        assertNotNull(jose);
+
+        assertEquals("José", jose.getNome());
     }
 
-    public Amigo pesquisaAmigo(String emailAmigo) {
-        return this.amigos.get(emailAmigo.toLowerCase());
-    }
+    @Test
+    void testaConfigurarEPesquisarAmigoSecretoComSucesso() {
+        try {
+            sistema.configuraAmigoSecretoDe("jose@email.com", "maria@email.com");
+            String amigoSorteado = sistema.pesquisaAmigoSecretoDe("jose@email.com");
 
-    public void enviarMensagemParaTodos(String texto, String emailRemetente, boolean ehAnonima) {
-        this.mensagens.add(new MensagemParaTodos(texto, emailRemetente, ehAnonima));
-    }
 
-    public void enviarMensagemParaAlguem(String texto, String emailRemetente, String emailDestinatario, boolean ehAnonima) {
-        this.mensagens.add(new MensagemParaAlguem(texto, emailRemetente, emailDestinatario, ehAnonima));
-    }
-
-    public List<Mensagem> pesquisaMensagensAnonimas() {
-        List<Mensagem> anonimas = new ArrayList<>();
-        for (Mensagem m : this.mensagens) {
-            if (m.ehAnonima()) {
-                anonimas.add(m);
-            }
+            assertEquals("maria@email.com", amigoSorteado);
+        } catch (AmigoInexistenteException | AmigoNaoSorteadoException e) {
+            fail("Não deveria lançar exceção ao configurar corretamente.");
         }
-        return anonimas;
     }
 
-    public List<Mensagem> pesquisaTodasAsMensagens() {
-        return this.mensagens;
+    @Test
+    void testaExcecaoAmigoInexistente() {
+
+        assertThrows(AmigoInexistenteException.class, () -> {
+            sistema.configuraAmigoSecretoDe("fantasma@email.com", "maria@email.com");
+        });
     }
 
-    public void configuraAmigoSecretoDe(String emailDaPessoa, String emailAmigoSorteado) throws AmigoInexistenteException {
-        Amigo pessoa = pesquisaAmigo(emailDaPessoa);
-        if (pessoa == null) {
-            throw new AmigoInexistenteException("A pessoa com e-mail " + emailDaPessoa + " não está cadastrada.");
-        }
-        pessoa.setAmigoSorteado(emailAmigoSorteado);
+    @Test
+    void testaExcecaoAmigoNaoSorteado() {
+
+        assertThrows(AmigoNaoSorteadoException.class, () -> {
+            sistema.pesquisaAmigoSecretoDe("jose@email.com");
+        });
     }
 
-    public String pesquisaAmigoSecretoDe(String emailDaPessoa) throws AmigoInexistenteException, AmigoNaoSorteadoException {
-        Amigo pessoa = pesquisaAmigo(emailDaPessoa);
-        if (pessoa == null) {
-            throw new AmigoInexistenteException("A pessoa com e-mail " + emailDaPessoa + " não está cadastrada.");
-        }
-        String sorteado = pessoa.getEmailAmigoSorteado();
-        if (sorteado == null) {
-            throw new AmigoNaoSorteadoException("O amigo secreto de " + emailDaPessoa + " ainda não foi configurado.");
-        }
-        return sorteado;
+    @Test
+    void testaEnvioDeMensagemAnonima() {
+        sistema.enviarMensagemParaTodos("Feliz Natal", "maria@email.com", true);
+        List<Mensagem> anonimas = sistema.pesquisaMensagensAnonimas();
+
+        // Afirma que a lista de mensagens anônimas tem tamanho 1
+        assertEquals(1, anonimas.size());
+        // Afirma que o texto salvo é exatamente este
+        assertTrue(anonimas.get(0).getTextoCompletoAExibir().contains("Mensagem para todos"));
     }
 }
