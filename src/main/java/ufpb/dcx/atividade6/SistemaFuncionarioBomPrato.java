@@ -1,5 +1,6 @@
 package ufpb.dcx.atividade6;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,9 +60,19 @@ public class SistemaFuncionarioBomPrato implements SistemaFuncionario {
 
     public Funcionario pesquisarFuncionario(String cpfFuncionario) throws FuncionarioInexistenteException{
         Funcionario funcionarioEncontrado = this.funcionarios.get(cpfFuncionario);
+        if(funcionarioEncontrado != this.funcionarios.get(cpfFuncionario)){
+            throw new FuncionarioInexistenteException("O funcionário não foi cadastrado");
+        }
+        return this.funcionarios.get(Funcionario);
     }
 
     public List <Funcionario> pesquisarFuncionariosComSalarioMaiorQue(double valor){
-
+        List<Funcionario> resultado = new ArrayList<Funcionario>();
+        for (Funcionario f : this.funcionarios.values()){
+            if (f.getSalario() > valor){
+                resultado.add(f)
+            }
+        }
+        return resultado;
     }
 }
